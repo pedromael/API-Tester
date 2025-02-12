@@ -1,0 +1,9 @@
+#response {
+    height: 300px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+  }
