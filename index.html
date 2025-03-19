@@ -11,68 +11,75 @@
   <title>API Tester</title>
 </head>
 <body>
-  <div class="container mt-4">
-    <h2 class="mb-3">API Request</h2>
-    <form id="apiForm">
-      <div class="form-group">
-        <label for="url">URL</label>
-        <input type="text" class="form-control" id="url" placeholder="Insira a URL da API">
-      </div>
-      <div class="form-group">
-        <label for="url">Access Token</label>
-        <input type="text" class="form-control" id="accessToken" placeholder="Insira o access token">
-      </div>
-      <div class="form-group">
-        <label for="method">Method</label>
-        <select class="form-control" id="method">
-          <option value="GET" selected>GET</option>
-          <option value="POST">POST</option>
-          <option value="PUT">PUT</option>
-          <option value="DELETE">DELETE</option>
-        </select>
-      </div>
-      
-      <div class="form-group">
-        <label>Formato do Request Body</label>
-        <div>
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="bodyMethod" id="jsonTextRadio" value="json" checked>
-            <label class="form-check-label" for="jsonTextRadio">JSON Text</label>
-          </div>
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="bodyMethod" id="keyValueRadio" value="keyValue">
-            <label class="form-check-label" for="keyValueRadio">Key-Value</label>
-          </div>
+  <div class="row p-4">
+    <div class="col-md-7">
+      <h2 class="mb-3">API Request</h2>
+      <form id="apiForm">
+        <div class="form-group">
+          <label for="url">URL</label>
+          <input type="text" class="form-control" id="url" placeholder="Insira a URL da API">
         </div>
-      </div>
-      
-      <div id="jsonTextBody" class="form-group">
-        <textarea class="form-control" id="body" placeholder='{"key": "value"}' rows="5"></textarea>
-      </div>
-      
-      <div id="keyValueBody" class="form-group" style="display: none;">
-        <div id="keyValuePairs">
-          <div class="form-row align-items-center mb-2">
-            <div class="col">
-              <input type="text" class="form-control" placeholder="Key">
+        <div class="form-group">
+          <label for="url">Access Token</label>
+          <input type="text" class="form-control" id="accessToken" placeholder="Insira o access token">
+        </div>
+        <div class="form-group">
+          <label for="method">Method</label>
+          <select class="form-control" id="method">
+            <option value="GET" selected>GET</option>
+            <option value="POST">POST</option>
+            <option value="PUT">PUT</option>
+            <option value="DELETE">DELETE</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label>Formato do Request Body</label>
+          <div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="bodyMethod" id="jsonTextRadio" value="json" checked>
+              <label class="form-check-label" for="jsonTextRadio">JSON Text</label>
             </div>
-            <div class="col">
-              <input type="text" class="form-control" placeholder="Value">
-            </div>
-            <div class="col-auto">
-              <button class="btn btn-danger remove-field" type="button">&times;</button>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="bodyMethod" id="keyValueRadio" value="keyValue">
+              <label class="form-check-label" for="keyValueRadio">Key-Value</label>
             </div>
           </div>
         </div>
-        <button type="button" class="btn btn-secondary mt-2" id="addField">Add Field</button>
-      </div>
+        
+        <div id="jsonTextBody" class="form-group">
+          <textarea class="form-control" id="body" placeholder='{"key": "value"}' rows="5"></textarea>
+        </div>
+        
+        <div id="keyValueBody" class="form-group" style="display: none;">
+          <div id="keyValuePairs">
+            <div class="form-row align-items-center mb-2">
+              <div class="col">
+                <input type="text" class="form-control" placeholder="Key">
+              </div>
+              <div class="col">
+                <input type="text" class="form-control" placeholder="Value">
+              </div>
+              <div class="col-auto">
+                <button class="btn btn-danger remove-field" type="button">&times;</button>
+              </div>
+            </div>
+          </div>
+          <button type="button" class="btn btn-secondary mt-2" id="addField">Add Field</button>
+        </div>
+        
+        <button type="button" class="btn btn-primary" onclick="sendRequest()">Send Request</button>
+        <button type="button" class="btn btn-secondary ml-2" onclick="clearResponse()">Clear Response</button>
+      </form>
       
-      <button type="button" class="btn btn-primary" onclick="sendRequest()">Send Request</button>
-      <button type="button" class="btn btn-secondary ml-2" onclick="clearResponse()">Clear Response</button>
-    </form>
-    
-    <h2 class="mt-4">API Response</h2>
-    <pre id="response"></pre>
+      <h2 class="mt-4">API Response</h2>
+      <pre id="response"></pre>
+    </div>
+    <div class="col-md-5">
+      <h2>Históricos</h2>
+      <ul id="historyList" class="list-group"></ul>
+      <button class="btn btn-danger mt-3" onclick="clearHistory()">Limpar Histórico</button>
+    </div>
   </div>
   <script src="scripts/others.js"></script>
 </body>
