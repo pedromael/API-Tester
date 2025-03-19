@@ -36,19 +36,29 @@ function sendRequest() {
         headers,
         body: method !== "GET" ? JSON.stringify(requestBody) : null
     })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(`Erro HTTP: ${response.status}`);
+    .then(async response => {
+        let responseBody;
+        
+        try {
+            responseBody = await response.json(); // Tenta converter a resposta em JSON
+        } catch {
+            responseBody = await response.text(); // Caso não seja JSON, pega como texto
         }
-        return response.json().catch(() => response.text()); // Evita erro se a resposta não for JSON
+    
+        if (!response.ok) {
+            throw new Error(`Erro HTTP: ${response.status} - ${JSON.stringify(responseBody)}`);
+        }
+        
+        return responseBody;
     })
     .then(data => {
         document.getElementById("response").textContent = JSON.stringify(data, null, 4);
     })
     .catch(error => {
         console.error("Erro ao fazer a requisição:", error);
-        document.getElementById("response").textContent = "Erro ao fazer a requisição: " + error.message;
+        document.getElementById("response").textContent = error.message;
     });
+    
 }
 
 // Coleta os dados dos pares key-value e constrói o objeto JSON
