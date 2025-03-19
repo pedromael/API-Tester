@@ -3,7 +3,6 @@ function sendRequest() {
     const method = document.getElementById("method").value;
     const accessToken = document.getElementById("accessToken").value;
 
-    // Determina qual método de entrada foi selecionado
     const bodyMethod = document.querySelector('input[name="bodyMethod"]:checked').value;
     let requestBody = {};
 
@@ -20,7 +19,6 @@ function sendRequest() {
 
     console.log("Enviando requisição:", { url, method, body: requestBody });
 
-    // Define cabeçalhos
     const headers = {};
     if (accessToken) {
         headers["Authorization"] = `Bearer ${accessToken}`;
@@ -37,9 +35,9 @@ function sendRequest() {
     .then(async response => {
         let responseBody;
         try {
-            responseBody = await response.json(); // Tenta converter a resposta em JSON
+            responseBody = await response.json();
         } catch {
-            responseBody = await response.text(); // Caso não seja JSON, pega como texto
+            responseBody = await response.text();
         }
 
         const requestData = {
@@ -51,12 +49,12 @@ function sendRequest() {
             response: responseBody
         };
 
-        saveToHistory(requestData); // Salva a requisição no histórico
+        saveToHistory(requestData);
+        extractAndSetAccessToken(responseBody);
 
         if (!response.ok) {
-            throw requestData; // Lança o erro para ser tratado no catch
+            throw requestData;
         }
-
         return responseBody;
     })
     .then(data => {
@@ -69,7 +67,18 @@ function sendRequest() {
     });
 }
 
-// Coleta os dados dos pares key-value e constrói o objeto JSON
+function extractAndSetAccessToken(responseBody) {
+    if (typeof responseBody === 'object') {
+        const tokenKeys = ['access_token', 'accesstoken', 'token', 'authToken'];
+        for (let key of tokenKeys) {
+            if (responseBody[key]) {
+                document.getElementById("accessToken").value = responseBody[key];
+                break;
+            }
+        }
+    }
+}
+
 function getKeyValueRequestBody() {
     const pairs = document.querySelectorAll("#keyValuePairs .form-row");
     let bodyObj = {};
@@ -83,15 +92,13 @@ function getKeyValueRequestBody() {
     return bodyObj;
 }
 
-// Salva requisições (sucesso ou erro) no histórico
 function saveToHistory(requestData) {
     let history = JSON.parse(localStorage.getItem("requestHistory")) || [];
     history.unshift(requestData);
-    localStorage.setItem("requestHistory", JSON.stringify(history.slice(0, 10))); // Mantém os últimos 10
+    localStorage.setItem("requestHistory", JSON.stringify(history.slice(0, 10)));
     loadHistory();
 }
 
-// Carrega o histórico no frontend
 function loadHistory() {
     let history = JSON.parse(localStorage.getItem("requestHistory")) || [];
     let historyList = document.getElementById("historyList");
@@ -105,7 +112,6 @@ function loadHistory() {
     });
 }
 
-// Carrega uma requisição do histórico para os campos do formulário
 function loadRequestFromHistory(item) {
     document.getElementById("url").value = item.url;
     document.getElementById("method").value = item.method;
@@ -116,11 +122,9 @@ function loadRequestFromHistory(item) {
     }
 }
 
-// Limpa o histórico de requisições
 function clearHistory() {
     localStorage.removeItem("requestHistory");
     loadHistory();
 }
 
-// Carregar histórico ao iniciar a página
 window.onload = loadHistory;
