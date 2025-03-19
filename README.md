@@ -6,21 +6,21 @@ O **API-Tester** é uma ferramenta desenvolvida para facilitar o processo de tes
 
 ## Status do Projeto
 
-🚧 **Em desenvolvimento** 🚧
+🚀 **Em desenvolvimento ativo** 🚀
 
 ## Funcionalidades
 
-- [x] Envio de requisições HTTP nos métodos: GET, POST, PUT, DELETE
-- [x] Configuração personalizada de headers e payloads
-- [x] Visualização estruturada das respostas das APIs
-- [ ] Histórico de requisições realizadas
-- [ ] Suporte para autenticação OAuth
+- [x] Envio de requisições HTTP nos métodos: **GET, POST, PUT, DELETE**
+- [x] Configuração personalizada de **headers e payloads**
+- [x] Visualização estruturada das **respostas das APIs**
+- [x] **Histórico de requisições realizadas**, incluindo requisições malsucedidas
+- [ ] Suporte para **autenticação OAuth**
 
 ## Demonstração da Aplicação
 
 *Em breve, serão disponibilizadas capturas de tela ou GIFs demonstrando o uso do API-Tester.*
 
-## Pré-requisitos
+## Requisitos
 
 Antes de começar, certifique-se de atender aos seguintes requisitos:
 
@@ -43,11 +43,11 @@ Para utilizar o **API-Tester**, siga os passos abaixo:
 
 ## Tecnologias Utilizadas
 
-- HTML5
-- CSS3
-- JavaScript
+- **HTML5**
+- **CSS3**
+- **JavaScript**
 
-## Contribuição
+## Como Contribuir
 
 Contribuições são bem-vindas! Se você deseja melhorar o **API-Tester**, siga os passos abaixo:
 
@@ -64,15 +64,16 @@ Contribuições são bem-vindas! Se você deseja melhorar o **API-Tester**, siga
    ```bash
    git push origin minha-feature
    ```
-5. Abra um Pull Request para análise.
+5. Abra um **Pull Request** para análise.
 
 ## Autor
 
-Desenvolvido por Pedro Manuel. Entre em contato!
+Desenvolvido por **Pedro Manuel**. Entre em contato!
 
 - [GitHub](https://github.com/pedromael)
 - [LinkedIn](https://www.linkedin.com/in/pedromael)
 
 ## Licença
 
-Este projeto está licenciado sob a Licença MIT. Consulte o arquivo [LICENSE](LICENSE) para mais informações.
+Este projeto está licenciado sob a **Licença MIT**. Consulte o arquivo [LICENSE](LICENSE) para mais informações.
+
