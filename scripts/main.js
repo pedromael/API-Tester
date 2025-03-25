@@ -1,3 +1,5 @@
+let autoInterval = null; 
+
 function sendRequest() {
     const url = document.getElementById("url").value;
     const method = document.getElementById("method").value;
@@ -65,6 +67,27 @@ function sendRequest() {
         document.getElementById("response").textContent = 
             `Erro HTTP: ${error.status || "Desconhecido"}\nMensagem: ${typeof error.response === 'object' ? JSON.stringify(error.response, null, 4) : error.response}`;
     });
+}
+
+function play() {
+    const autoEnabled = document.getElementById("autoToggle").checked;
+    const intervalo = parseInt(document.getElementById("intervalo").value, 10) * 1000;
+    const dataTermino = new Date(document.getElementById("data-auto-termino").value).getTime();
+    
+    if (autoEnabled && intervalo > 0 && dataTermino > Date.now()) {
+        if (autoInterval) clearInterval(autoInterval); // Evita múltiplos loops simultâneos
+        
+        autoInterval = setInterval(() => {
+            if (Date.now() >= dataTermino) {
+                clearInterval(autoInterval);
+                alert("Automação encerrada.");
+                return;
+            }
+            sendRequest();
+        }, intervalo);
+    } else {
+        if (autoInterval) clearInterval(autoInterval); // Para a automação caso desativada
+    }
 }
 
 function extractAndSetAccessToken(responseBody) {
