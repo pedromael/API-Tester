@@ -67,6 +67,8 @@ function sendRequest() {
         document.getElementById("response").textContent = 
             `Erro HTTP: ${error.status || "Desconhecido"}\nMensagem: ${typeof error.response === 'object' ? JSON.stringify(error.response, null, 4) : error.response}`;
     });
+
+    play();
 }
 
 function play() {
