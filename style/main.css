@@ -68,3 +68,15 @@
   input:checked + .slider:before {
     transform: translateX(14px);
   }
+
+  .historyList{
+    list-style-type: none;
+  }
+
+  .sucessRequest{
+    color: green;
+  }
+
+  .dangerRequest{
+    color: red;
+  }

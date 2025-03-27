@@ -94,7 +94,7 @@ function play() {
 
 function extractAndSetAccessToken(responseBody) {
     if (typeof responseBody === 'object') {
-        const tokenKeys = ['access_token', 'accesstoken', 'token', 'authToken'];
+        const tokenKeys = ['access_token', 'accesstoken', 'token', 'authToken', 'accessToken'];
         for (let key of tokenKeys) {
             if (responseBody[key]) {
                 document.getElementById("accessToken").value = responseBody[key];
@@ -120,7 +120,7 @@ function getKeyValueRequestBody() {
 function saveToHistory(requestData) {
     let history = JSON.parse(localStorage.getItem("requestHistory")) || [];
     history.unshift(requestData);
-    localStorage.setItem("requestHistory", JSON.stringify(history.slice(0, 10)));
+    localStorage.setItem("requestHistory", JSON.stringify(history.slice(0, 25))); // salve as ultimas 25 requisicoes
     loadHistory();
 }
 
@@ -128,14 +128,16 @@ function loadHistory() {
     let history = JSON.parse(localStorage.getItem("requestHistory")) || [];
     let historyList = document.getElementById("historyList");
     historyList.innerHTML = "";
-    history.forEach((item, index) => {
+
+    history.forEach((item) => {
         let li = document.createElement("li");
-        li.className = `list-group-item ${item.status >= 400 ? 'list-group-item-danger' : 'list-group-item-success'}`;
-        li.textContent = `[${item.status}] ${item.method} - ${item.url}`;
+        li.className = "pb-1 historyList";
+        li.innerHTML = `<span class="${item.status >= 400 ? 'dangerRequest' : 'sucessRequest'}">[${item.status}]</span> ${item.method} - ${item.url}`;
         li.onclick = () => loadRequestFromHistory(item);
         historyList.appendChild(li);
     });
 }
+
 
 function loadRequestFromHistory(item) {
     document.getElementById("url").value = item.url;
