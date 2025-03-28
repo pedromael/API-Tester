@@ -94,7 +94,7 @@ function play() {
 
 function extractAndSetAccessToken(responseBody) {
     if (typeof responseBody === 'object') {
-        const tokenKeys = ['access_token', 'accesstoken', 'token', 'authToken'];
+        const tokenKeys = ['access_token', 'accesstoken', 'token', 'authToken', 'accessToken'];
         for (let key of tokenKeys) {
             if (responseBody[key]) {
                 document.getElementById("accessToken").value = responseBody[key];
@@ -120,7 +120,7 @@ function getKeyValueRequestBody() {
 function saveToHistory(requestData) {
     let history = JSON.parse(localStorage.getItem("requestHistory")) || [];
     history.unshift(requestData);
-    localStorage.setItem("requestHistory", JSON.stringify(history.slice(0, 10)));
+    localStorage.setItem("requestHistory", JSON.stringify(history.slice(0, 25))); // salve as ultimas 25 requisicoes
     loadHistory();
 }
 
@@ -128,14 +128,16 @@ function loadHistory() {
     let history = JSON.parse(localStorage.getItem("requestHistory")) || [];
     let historyList = document.getElementById("historyList");
     historyList.innerHTML = "";
-    history.forEach((item, index) => {
+
+    history.forEach((item) => {
         let li = document.createElement("li");
-        li.className = `list-group-item ${item.status >= 400 ? 'list-group-item-danger' : 'list-group-item-success'}`;
-        li.textContent = `[${item.status}] ${item.method} - ${item.url}`;
+        li.className = "pb-1 historyList";
+        li.innerHTML = `<span class="${item.status >= 400 ? 'dangerRequest' : 'sucessRequest'}">[${item.status}]</span> ${item.method} - ${item.url}`;
         li.onclick = () => loadRequestFromHistory(item);
         historyList.appendChild(li);
     });
 }
+
 
 function loadRequestFromHistory(item) {
     document.getElementById("url").value = item.url;
@@ -153,3 +155,77 @@ function clearHistory() {
 }
 
 window.onload = loadHistory;
+
+function importar(){
+
+}
+
+function exportar() {
+    const overlay = document.createElement("div");
+    overlay.style.position = "fixed";
+    overlay.style.top = 0;
+    overlay.style.left = 0;
+    overlay.style.width = "100%";
+    overlay.style.height = "100%";
+    overlay.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
+    overlay.style.display = "flex";
+    overlay.style.justifyContent = "center";
+    overlay.style.alignItems = "center";
+    overlay.style.zIndex = 1000;
+
+    const modal = document.createElement("div");
+    modal.style.backgroundColor = "#fff";
+    modal.style.padding = "20px";
+    modal.style.borderRadius = "8px";
+    modal.style.textAlign = "center";
+    modal.style.boxShadow = "0 2px 10px rgba(0, 0, 0, 0.2)";
+    modal.innerHTML = `<h3>Escolha o que deseja exportar:</h3>`;
+
+    const btnHistorico = document.createElement("button");
+    btnHistorico.textContent = "Histórico";
+    btnHistorico.style.margin = "10px";
+    btnHistorico.onclick = function() {
+        exportarHistorico();
+        document.body.removeChild(overlay);
+    };
+
+    const btnRespostaAPI = document.createElement("button");
+    btnRespostaAPI.textContent = "Resposta API";
+    btnRespostaAPI.style.margin = "10px";
+    btnRespostaAPI.onclick = function() {
+        exportarRespostaAPI();
+        document.body.removeChild(overlay);
+    };
+
+    modal.appendChild(btnHistorico);
+    modal.appendChild(btnRespostaAPI);
+    overlay.appendChild(modal);
+    document.body.appendChild(overlay);
+}
+
+function exportarHistorico() {
+    const history = JSON.parse(localStorage.getItem("requestHistory")) || [];
+    salvarArquivo(history, "requestHistory.json");
+}
+
+function exportarRespostaAPI() {
+    const requisicaoCorrente = {
+        url: document.getElementById("url").value,
+        method: document.getElementById("method").value,
+        response: document.getElementById("response").value,
+        accessToken: document.getElementById("accessToken").value
+    };
+    salvarArquivo(requisicaoCorrente, "requisicaoAtual.json");
+}
+
+function salvarArquivo(data, filename) {
+    const blob = new Blob([JSON.stringify(data, null, 4)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
