@@ -156,8 +156,42 @@ function clearHistory() {
 
 window.onload = loadHistory;
 
-function importar(){
+function importar() {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "application/json";
 
+    input.onchange = (event) => {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            try {
+                const json = JSON.parse(e.target.result);
+
+                // Verifica se é um array de histórico
+                if (Array.isArray(json)) {
+                    localStorage.setItem("requestHistory", JSON.stringify(json.slice(0, 25)));
+                    loadHistory();
+                    alert("Histórico importado com sucesso!");
+                } else if (typeof json === "object") {
+                    // Trata como requisição individual
+                    loadRequestFromHistory(json);
+                    alert("Requisição carregada com sucesso!");
+                } else {
+                    alert("Formato de arquivo inválido.");
+                }
+            } catch (err) {
+                alert("Erro ao importar: JSON inválido.");
+                console.error(err);
+            }
+        };
+
+        reader.readAsText(file);
+    };
+
+    input.click();
 }
 
 function exportar() {
