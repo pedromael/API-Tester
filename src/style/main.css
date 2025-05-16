@@ -78,3 +78,40 @@ input:checked + .slider:before {
 .sucessRequest{
   color: green;
 }
+
+.scrollable-col {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE 10+ */
+  overflow-y: auto;
+  transition: scrollbar-color 0.3s ease;
+}
+
+/* Para navegadores WebKit (Chrome, Edge, Safari) */
+.scrollable-col::-webkit-scrollbar {
+  width: 2px;
+  transition: opacity 0.5s;
+  opacity: 0;
+}
+
+.scrollable-col.show-scrollbar::-webkit-scrollbar {
+  opacity: 1;
+}
+
+/* Estilo visual da scrollbar */
+.scrollable-col::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+.scrollable-col::-webkit-scrollbar-thumb {
+  background: #343a40;
+  border-radius: 10px;
+}
+.scrollable-col::-webkit-scrollbar-thumb:hover {
+  background: #212529;
+}
+
+/* Firefox */
+.scrollable-col.show-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #343a40 #f1f1f1;
+}

@@ -105,16 +105,19 @@ function extractAndSetAccessToken(responseBody) {
 }
 
 function getKeyValueRequestBody() {
-    const pairs = document.querySelectorAll("#keyValuePairs .form-row");
-    let bodyObj = {};
-    pairs.forEach(row => {
-        const keyInput = row.querySelector("input[placeholder='Key']");
-        const valueInput = row.querySelector("input[placeholder='Value']");
-        if (keyInput && keyInput.value.trim() !== "") {
-            bodyObj[keyInput.value.trim()] = valueInput ? valueInput.value.trim() : "";
-        }
-    });
-    return bodyObj;
+  const rows = document.querySelectorAll("#keyValuePairs .row");
+  let bodyObj = {};
+
+  rows.forEach(row => {
+    const keyInput = row.querySelector("input[placeholder='Key']");
+    const valueInput = row.querySelector("input[placeholder='Value']");
+
+    if (keyInput && keyInput.value.trim() !== "") {
+      bodyObj[keyInput.value.trim()] = valueInput ? valueInput.value.trim() : "";
+    }
+  });
+
+  return bodyObj;
 }
 
 function saveToHistory(requestData) {

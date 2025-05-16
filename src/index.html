@@ -69,13 +69,21 @@
             <input type="text" class="form-control" id="accessToken" placeholder="Insira o access token" />
           </div>
           <div class="mb-3">
-            <label for="method" class="form-label">Method</label>
-            <select class="form-select" id="method">
-              <option value="GET" selected>GET</option>
-              <option value="POST">POST</option>
-              <option value="PUT">PUT</option>
-              <option value="DELETE">DELETE</option>
-            </select>
+            <div class="container p-0">
+              <div class="row">
+                <div class="col-auto">
+                  <label for="method" class="form-label">Method</label>
+                </div>
+                <div class="col">
+                  <select class="form-select" id="method">
+                    <option value="GET" selected>GET</option>
+                    <option value="POST">POST</option>
+                    <option value="PUT">PUT</option>
+                    <option value="DELETE">DELETE</option>
+                  </select>
+                </div>
+              </div>
+            </div>
           </div>
 
           <div class="mb-3">
@@ -158,6 +166,7 @@
   </div>
 
   <script src="scripts/others.js"></script>
+  <script src="style/stilo.js"></script>
 
   <script>
     $(document).ready(function () {
