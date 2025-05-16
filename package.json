@@ -1,0 +1,26 @@
+{
+  "name": "api-tester",
+  "version": "1.0.0",
+  "description": "O **API-Tester** é uma ferramenta desenvolvida para facilitar o processo de teste de APIs RESTful. Com uma interface amigável, permite que desenvolvedores enviem requisições HTTP e analisem as respostas de maneira eficiente, agilizando o fluxo de trabalho e garantindo a qualidade das integrações.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron .",
+    "builder": "electron-builder"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pedromael/API-Tester.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/pedromael/API-Tester/issues"
+  },
+  "homepage": "https://github.com/pedromael/API-Tester#readme",
+  "dependencies": {
+    "electron": "^36.2.1"
+  }
+}
