@@ -19,6 +19,10 @@ body.dark-mode {
   color: white;
   border: 1px solid #555;
 }
+.dark-mode .form-control::placeholder {
+  color: #ffffff9f;
+  opacity: 1; /* garante opacidade total em alguns navegadores */
+}
 .dark-mode .btn {
   border: 1px solid #bbb;
 }

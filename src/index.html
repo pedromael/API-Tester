@@ -1,113 +1,134 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="style/main.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="app:///node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="style/main.css" />
+  <script src="app:///node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
   <script src="scripts/main.js"></script>
   <title>API Tester</title>
 </head>
 <body>
 
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+    .main-content {
+      position: absolute;
+      top: 56px;    /* altura do navbar */
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 1rem;
+      overflow: hidden; /* esconde rolagem global */
+    }
+    /* Colunas scrolláveis de forma independente */
+    .scrollable-col {
+      height: 100%;
+      overflow-y: auto;
+    }
+  </style>
   <!-- Navbar -->
-  <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
-    <a class="navbar-brand" href="#">API Tester</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+  <nav class="navbar navbar-expand-sm navbar-dark bg-dark fixed-top">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">API Tester</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
         <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ml-auto">
-            <li class="nav-item mx-1">
-                <span class="navbar-text mr-2">Modo Escuro</span>
-                <label class="switch">
-                    <input type="checkbox" id="themeToggle">
-                    <span class="slider"></span>
-                </label>
-            </li>
-            <li class="nav-item mx-1">
-                <button class="btn btn-outline-light" id="importButton" onclick="importar()">Importar</button>
-                <button class="btn btn-outline-light" id="exportButton" onclick="exportar()">Exportar</button>
-            </li>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto align-items-center">
+          <li class="nav-item me-2">
+            <span class="navbar-text me-2">Modo Escuro</span>
+            <div class="form-check form-switch d-inline-block">
+              <input class="form-check-input" type="checkbox" id="themeToggle">
+            </div>
+          </li>
+          <li class="nav-item">
+            <button class="btn btn-outline-light me-1" id="importButton" onclick="importar()">Importar</button>
+            <button class="btn btn-outline-light" id="exportButton" onclick="exportar()">Exportar</button>
+          </li>
         </ul>
+      </div>
     </div>
   </nav>
 
-  <div class="container mt-4">
-    <div class="row">
-      <div class="col-md-7">
+  <div class="main-content container-fluid">
+    <div class="row h-100 gx-4">
+      <div class="col-md-7 scrollable-col">
         <form id="apiForm">
-          <div class="form-group">
-            <label for="url">URL</label>
-            <input type="text" class="form-control" id="url" placeholder="Insira a URL da API">
+          <div class="mb-3">
+            <label for="url" class="form-label">URL</label>
+            <input type="text" class="form-control" id="url" placeholder="Insira a URL da API" />
           </div>
-          <div class="form-group">
-            <label for="accessToken">Access Token</label>
-            <input type="text" class="form-control" id="accessToken" placeholder="Insira o access token">
+          <div class="mb-3">
+            <label for="accessToken" class="form-label">Access Token</label>
+            <input type="text" class="form-control" id="accessToken" placeholder="Insira o access token" />
           </div>
-          <div class="form-group">
-            <label for="method">Method</label>
-            <select class="form-control" id="method">
+          <div class="mb-3">
+            <label for="method" class="form-label">Method</label>
+            <select class="form-select" id="method">
               <option value="GET" selected>GET</option>
               <option value="POST">POST</option>
               <option value="PUT">PUT</option>
               <option value="DELETE">DELETE</option>
             </select>
           </div>
-          
-          <div class="form-group">
-            <label for="intervalo">Automação</label>
-            <div class="custom-control custom-switch">
-              <input type="checkbox" class="custom-control-input" id="autoToggle">
-              <label class="custom-control-label" for="autoToggle">Ativar Automação</label>
+
+          <div class="mb-3">
+            <label class="form-label">Automação</label>
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="autoToggle">
+              <label class="form-check-label" for="autoToggle">Ativar Automação</label>
             </div>
             <div class="row mt-2">
               <div class="col-md-6">
-                <input type="number" id="intervalo" class="form-control" placeholder="Intervalo em segundos" disabled>
+                <input type="number" id="intervalo" class="form-control" placeholder="Intervalo em segundos" disabled />
               </div>
               <div class="col-md-6">
-                <input type="datetime-local" class="form-control" id="data-auto-termino" disabled>
+                <input type="datetime-local" class="form-control" id="data-auto-termino" disabled />
               </div>
             </div>
           </div>
-          
+
           <script>
-            $(document).ready(function() {
-              $("#autoToggle").on("change", function() {
+            $(document).ready(function () {
+              $("#autoToggle").on("change", function () {
                 const isEnabled = $(this).is(":checked");
                 $("#intervalo, #data-auto-termino").prop("disabled", !isEnabled);
               });
             });
-          </script>                 
+          </script>
 
-          <div class="form-group">
-            <label>Formato do Request Body</label>
+          <div class="mb-3">
+            <label class="form-label">Formato do Request Body</label>
             <div>
               <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="bodyMethod" id="jsonTextRadio" value="json" checked>
+                <input class="form-check-input" type="radio" name="bodyMethod" id="jsonTextRadio" value="json" checked />
                 <label class="form-check-label" for="jsonTextRadio">JSON Text</label>
               </div>
               <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="bodyMethod" id="keyValueRadio" value="keyValue">
+                <input class="form-check-input" type="radio" name="bodyMethod" id="keyValueRadio" value="keyValue" />
                 <label class="form-check-label" for="keyValueRadio">Key-Value</label>
               </div>
             </div>
           </div>
-          
-          <div id="jsonTextBody" class="form-group">
-            <textarea class="form-control" id="body" placeholder='{"key": "value"}' rows="5"></textarea>
+
+          <div id="jsonTextBody" class="mb-3">
+            <textarea class="form-control" id="body" rows="5" placeholder='{"key": "value"}'></textarea>
           </div>
-          
-          <div id="keyValueBody" class="form-group" style="display: none;">
+
+          <div id="keyValueBody" class="mb-3" style="display: none;">
             <div id="keyValuePairs">
-              <div class="form-row align-items-center mb-2">
+              <div class="row align-items-center mb-2">
                 <div class="col">
-                  <input type="text" class="form-control" placeholder="Key">
+                  <input type="text" class="form-control" placeholder="Key" />
                 </div>
                 <div class="col">
-                  <input type="text" class="form-control" placeholder="Value">
+                  <input type="text" class="form-control" placeholder="Value" />
                 </div>
                 <div class="col-auto">
                   <button class="btn btn-danger remove-field" type="button">&times;</button>
@@ -116,18 +137,22 @@
             </div>
             <button type="button" class="btn btn-secondary mt-2" id="addField">Add Field</button>
           </div>
-          
+
           <button type="button" class="btn btn-primary" onclick="sendRequest()">Send Request</button>
-          <button type="button" class="btn btn-secondary ml-2" onclick="clearResponse()">Clear Response</button>
+          <button type="button" class="btn btn-secondary ms-2" onclick="clearResponse()">Clear Response</button>
         </form>
-        
-        <h2 class="mt-4">API Response</h2>
-        <pre id="response" class="dark-mode"></pre>
       </div>
-      <div class="col-md-5">
-        <h2>Históricos</h2>
-        <ul id="historyList" class="list-group"></ul>
-        <button class="btn btn-danger mt-3" onclick="clearHistory()">Limpar Histórico</button>
+
+      <div class="col-md-5 scrollable-col">
+        <div class="container">
+          <h2 class="mt-4">API Response</h2>
+          <pre id="response" class="dark-mode"></pre>
+        </div>
+        <div class="container">
+          <h2>Históricos</h2>
+          <ul id="historyList" class="list-group"></ul>
+          <button class="btn btn-danger mt-3" onclick="clearHistory()">Limpar Histórico</button>
+        </div>
       </div>
     </div>
   </div>
@@ -135,13 +160,12 @@
   <script src="scripts/others.js"></script>
 
   <script>
-    // Carregar tema salvo
-    $(document).ready(function() {
+    $(document).ready(function () {
       const darkMode = localStorage.getItem("darkMode") === "enabled";
       $("#themeToggle").prop("checked", darkMode);
       if (darkMode) $("body").addClass("dark-mode");
 
-      $("#themeToggle").on("change", function() {
+      $("#themeToggle").on("change", function () {
         if (this.checked) {
           $("body").addClass("dark-mode");
           localStorage.setItem("darkMode", "enabled");

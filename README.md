@@ -24,7 +24,6 @@ O **API-Tester** é uma ferramenta desenvolvida para facilitar o processo de tes
 
 Antes de começar, certifique-se de atender aos seguintes requisitos:
 
-- Navegador web atualizado
 - Conexão com a internet
 
 ## Como Rodar a Aplicação

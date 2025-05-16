@@ -8,40 +8,45 @@ $('input[name="bodyMethod"]').on('change', function() {
     $('#keyValueBody').show();
     }
 });
+// Ao clicar em “Add Field”, adiciona uma nova linha de key-value
+document.getElementById("addField").addEventListener("click", () => {
+  const keyValuePairs = document.getElementById("keyValuePairs");
 
-// Adiciona uma nova linha de key-value
-document.getElementById("addField").addEventListener("click", function() {
-    const keyValuePairs = document.getElementById("keyValuePairs");
-    const row = document.createElement("div");
-    row.classList.add("form-row", "align-items-center", "mb-2");
-    row.innerHTML = `
+  // Cria a div.row com espaçamento (g-2) e alinhamento
+  const row = document.createElement("div");
+  row.className = "row g-2 align-items-center mb-2";
+  row.innerHTML = `
     <div class="col">
-        <input type="text" class="form-control" placeholder="Key">
+      <input type="text" class="form-control" placeholder="Key">
     </div>
     <div class="col">
-        <input type="text" class="form-control" placeholder="Value">
+      <input type="text" class="form-control" placeholder="Value">
     </div>
     <div class="col-auto">
-        <button class="btn btn-danger remove-field" type="button">&times;</button>
+      <button class="btn btn-danger remove-field" type="button">&times;</button>
     </div>
-    `;
-    keyValuePairs.appendChild(row);
+  `;
+
+  keyValuePairs.appendChild(row);
 });
 
-// Remove uma linha de key-value
-document.getElementById("keyValuePairs").addEventListener("click", function(e) {
-    if (e.target && e.target.matches("button.remove-field")) {
-    const rows = document.querySelectorAll("#keyValuePairs .form-row");
-    if (rows.length > 1) {
-        e.target.closest(".form-row").remove();
+// Delegação para remover uma linha inteira de key-value
+document.getElementById("keyValuePairs").addEventListener("click", (e) => {
+  if (e.target.classList.contains("remove-field")) {
+    const keyValuePairs = document.getElementById("keyValuePairs");
+    const allRows = keyValuePairs.querySelectorAll(".row");
+
+    if (allRows.length > 1) {
+      // Remove a <div class="row"> pai do botão clicado
+      e.target.closest(".row").remove();
     } else {
-        const keyInput = e.target.closest(".form-row").querySelector("input[placeholder='Key']");
-        const valueInput = e.target.closest(".form-row").querySelector("input[placeholder='Value']");
-        keyInput.value = "";
-        valueInput.value = "";
+      // Se for o único, apenas limpa os inputs
+      const inputs = allRows[0].querySelectorAll("input");
+      inputs.forEach(input => input.value = "");
     }
-    }
+  }
 });
+
 
 function clearResponse() {
     document.getElementById("response").textContent = "";
