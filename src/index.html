@@ -26,41 +26,89 @@
       padding-bottom: 4rem; /* Adicionado para não ocultar conteúdo pelo footer */
       overflow: hidden; 
     }
+    .header{
+      background-color: rgb(136, 135, 135);
+    }
     .scrollable-col { height: 100%; overflow-y: auto; }
     .workspace { width: 100%; height: 100%; }
   </style>
 
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-sm navbar-dark bg-dark fixed-top">
-    <div class="container-fluid">
-      <!-- Icon atrás do título -->
-      <a class="navbar-brand d-flex align-items-center" href="#">
-        <i class="bi bi-code-slash me-2"></i>
-        <span>API Tester</span>
-      </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto align-items-center">
-          <li class="nav-item me-2">
-            <span class="navbar-text me-2">Modo Escuro</span>
-            <div class="form-check form-switch d-inline-block">
-              <input class="form-check-input" type="checkbox" id="themeToggle">
+  <div class="fixed-top header">
+    <div class="container-fluid p-0">
+      <div class="row">
+        <!-- Navbar -->
+        <div class="col">
+          <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+            <div class="container-fluid">
+              <!-- Icon atrás do título -->
+              <a class="navbar-brand d-flex align-items-center" href="#">
+                <i class="bi bi-code-slash me-2"></i>
+                <span>API Tester</span>
+              </a>
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                  <li class="nav-item me-2">
+                    <span class="navbar-text me-2">Modo Escuro</span>
+                    <div class="form-check form-switch d-inline-block">
+                      <input class="form-check-input" type="checkbox" id="themeToggle">
+                    </div>
+                  </li>
+                  <li class="nav-item me-2">
+                    <button class="btn btn-outline-light me-1" id="importButton" onclick="importar()">Importar</button>
+                    <button class="btn btn-outline-light me-1" id="exportButton" onclick="exportar()">Exportar</button>
+                  </li>
+                  <li class="nav-item">
+                    <!-- Botão para nova workspace -->
+                    <button class="btn btn-outline-light" id="newWorkspaceBtn">+ Nova Área</button>
+                  </li>
+                </ul>
+              </div>
             </div>
-          </li>
-          <li class="nav-item me-2">
-            <button class="btn btn-outline-light me-1" id="importButton" onclick="importar()">Importar</button>
-            <button class="btn btn-outline-light me-1" id="exportButton" onclick="exportar()">Exportar</button>
-          </li>
-          <li class="nav-item">
-            <!-- Botão para nova workspace -->
-            <button class="btn btn-outline-light" id="newWorkspaceBtn">+ Nova Área</button>
-          </li>
-        </ul>
+          </nav>
+        </div>
+        <div class="col-auto">
+          <style>
+            .window-controls {
+              height: 30px;
+              padding: 4px;
+              display: flex;
+              justify-content: flex-end;
+              align-items: center;
+              -webkit-app-region: drag; /* permite mover a janela */
+            }
+
+            .window-controls button {
+              -webkit-app-region: no-drag; /* os botões não devem arrastar */
+              margin-left: 5px;
+            }
+
+          </style>
+          <div class="window-controls container-fluid navbar-dark bg-dark">
+            <div class="window-controls">
+              <button class="btn btn-link text-white" id="minimize" title="Minimizar">
+                <i class="bi bi-dash"></i>
+              </button>
+              <button class="btn btn-link text-white" id="maximize" title="Maximizar">
+                <i class="bi bi-square"></i>
+              </button>
+              <button class="btn btn-link text-white" id="close" title="Fechar">
+                <i class="bi bi-x"></i>
+              </button>
+            </div>
+          </div>
+
+          <script>
+            document.getElementById('minimize').addEventListener('click', () => window.api.minimize());
+            document.getElementById('maximize').addEventListener('click', () => window.api.maximize());
+            document.getElementById('close').addEventListener('click', () => window.api.close());
+          </script>
+        </div>
       </div>
     </div>
-  </nav>
+  </div>
 
   <div class="main-content container-fluid px-4">
     <div id="workspaceCarousel" class="carousel slide h-100" data-bs-ride="false" data-bs-wrap="false">
@@ -178,17 +226,17 @@
     <div class="container-fluid d-flex justify-content-between align-items-center">
       <!-- Botão anterior do carrossel -->
       <button class="btn btn-link text-white" type="button" data-bs-target="#workspaceCarousel" data-bs-slide="prev">
-        <i class="bi bi-chevron-left fs-4"></i>
+        <i class="bi bi-chevron-left fs-6"></i>
       </button>
 
       <!-- Nome centralizado -->
       <div class="text-center flex-grow-1">
-        <span class="fw-bold"><a href="http://github.com/pedromael/API-Tester.git">Github</a></span>
+        <span class="fw-bold"><a target="_blank" href="http://github.com/pedromael/API-Tester.git">Github</a></span>
       </div>
 
       <!-- Botão próximo do carrossel -->
       <button class="btn btn-link text-white" type="button" data-bs-target="#workspaceCarousel" data-bs-slide="next">
-        <i class="bi bi-chevron-right fs-4"></i>
+        <i class="bi bi-chevron-right fs-6"></i>
       </button>
     </div>
   </footer>
