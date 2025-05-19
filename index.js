@@ -15,8 +15,8 @@ app.whenReady().then(() => {
         minHeight: 600,
         frame: false,
         webPreferences: {
-        nodeIntegration: true,
-        contextIsolation: false,
+        nodeIntegration: false,
+        contextIsolation: true,
         preload: path.join(__dirname, 'preload.js')
         }
     });
