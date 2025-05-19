@@ -151,10 +151,10 @@
       </div>
 
       <div class="col-md-5 scrollable-col">
-        <div class="container">
+        <div class="container mb-2">
           <div class="d-flex justify-content-between align-items-center mt-4">
             <h2>API Response</h2>
-            <button class="btn btn-sm btn-outline-secondary copiarResponse" onclick="copyApiResponse()">
+            <button class="btn btn-sm copiarResponse" onclick="copyApiResponse()">
               Copiar
             </button>
           </div>
@@ -162,7 +162,7 @@
           <button type="button" class="btn btn-secondary ms-2" onclick="clearResponse()">Clear Response</button>
         </div>
 
-        <div class="container mt-4">
+        <div class="container">
           <h2>Históricos</h2>
           <ul id="historyList" class="list-group"></ul>
           <button class="btn btn-danger mt-3" onclick="clearHistory()">Limpar Histórico</button>
@@ -172,13 +172,18 @@
       <script>
         function copyApiResponse() {
           const responseText = document.getElementById('response').innerText;
+          let labelCopiar = document.querySelector('.copiarResponse');
+
           navigator.clipboard.writeText(responseText)
-            .then(() => document.querySelector('.copiarResponse').innerText = 'Copiado!')
+            .then(() => labelCopiar.innerText = 'Copiado!')
             .catch(err => alert('Erro ao copiar: ' + err));
 
+          labelCopiar.style.color = 'green';
+          
           setTimeout(() => {
             document.querySelector('.copiarResponse').innerText = 'Copiar';
-          }, 2000);
+            labelCopiar.style.color = '';
+          }, 4000);
         }
       </script>
 
