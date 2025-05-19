@@ -1,16 +1,17 @@
 let autoInterval = null; 
 
-function sendRequest() {
-    const url = document.getElementById("url").value;
-    const method = document.getElementById("method").value;
-    const accessToken = document.getElementById("accessToken").value;
+function sendRequest(idx) {
+    console.log("Enviando requisição para o índice:", idx);
+    const url = document.getElementById("url-"+idx).value;
+    const method = document.getElementById("method-"+idx).value;
+    const accessToken = document.getElementById("accessToken-"+idx).value;
 
-    const bodyMethod = document.querySelector('input[name="bodyMethod"]:checked').value;
+    const bodyMethod = document.querySelector(`input[name="bodyMethod-${idx}"]:checked`).value
     let requestBody = {};
 
     if (bodyMethod === 'json') {
         try {
-            requestBody = JSON.parse(document.getElementById("body").value);
+            requestBody = JSON.parse(document.getElementById("body-"+idx).value);
         } catch (e) {
             alert("JSON inválido. Por favor, verifique sua entrada.");
             return;
@@ -43,6 +44,7 @@ function sendRequest() {
         }
 
         const requestData = {
+            idx,
             url,
             method,
             accessToken,
@@ -51,8 +53,8 @@ function sendRequest() {
             response: responseBody
         };
 
-        saveToHistory(requestData);
-        extractAndSetAccessToken(responseBody);
+        saveToHistory(requestData, idx);
+        extractAndSetAccessToken(responseBody, idx);
 
         if (!response.ok) {
             throw requestData;
@@ -60,21 +62,21 @@ function sendRequest() {
         return responseBody;
     })
     .then(data => {
-        document.getElementById("response").textContent = JSON.stringify(data, null, 4);
+        document.getElementById("response-"+idx).textContent = JSON.stringify(data, null, 4);
     })
     .catch(error => {
         console.error("Erro ao fazer a requisição:", error);
-        document.getElementById("response").textContent = 
+        document.getElementById("response-"+idx).textContent = 
             `Erro HTTP: ${error.status || "Desconhecido"}\nMensagem: ${typeof error.response === 'object' ? JSON.stringify(error.response, null, 4) : error.response}`;
     });
 
-    play();
+    play(idx);
 }
 
-function play() {
-    const autoEnabled = document.getElementById("autoToggle").checked;
-    const intervalo = parseInt(document.getElementById("intervalo").value, 10) * 1000;
-    const dataTermino = new Date(document.getElementById("data-auto-termino").value).getTime();
+function play(idx) {
+    const autoEnabled = document.getElementById("autoToggle-"+idx).checked;
+    const intervalo = parseInt(document.getElementById("intervalo-"+idx).value, 10) * 1000;
+    const dataTermino = new Date(document.getElementById("data-auto-termino-"+idx).value).getTime();
     
     if (autoEnabled && intervalo > 0 && dataTermino > Date.now()) {
         if (autoInterval) clearInterval(autoInterval); // Evita múltiplos loops simultâneos
@@ -85,27 +87,27 @@ function play() {
                 alert("Automação encerrada.");
                 return;
             }
-            sendRequest();
+            sendRequest(idx);
         }, intervalo);
     } else {
         if (autoInterval) clearInterval(autoInterval); // Para a automação caso desativada
     }
 }
 
-function extractAndSetAccessToken(responseBody) {
+function extractAndSetAccessToken(responseBody, idx) {
     if (typeof responseBody === 'object') {
         const tokenKeys = ['access_token', 'accesstoken', 'token', 'authToken', 'accessToken'];
         for (let key of tokenKeys) {
             if (responseBody[key]) {
-                document.getElementById("accessToken").value = responseBody[key];
+                document.getElementById("accessToken-"+idx).value = responseBody[key];
                 break;
             }
         }
     }
 }
 
-function getKeyValueRequestBody() {
-  const rows = document.querySelectorAll("#keyValuePairs .row");
+function getKeyValueRequestBody(idx) {
+  const rows = document.querySelectorAll("#keyValuePairs-"+idx+" .row");
   let bodyObj = {};
 
   rows.forEach(row => {
@@ -120,44 +122,42 @@ function getKeyValueRequestBody() {
   return bodyObj;
 }
 
-function saveToHistory(requestData) {
-    let history = JSON.parse(localStorage.getItem("requestHistory")) || [];
+function saveToHistory(requestData, idx) {
+    let history = JSON.parse(localStorage.getItem("requestHistory-"+idx)) || [];
     history.unshift(requestData);
-    localStorage.setItem("requestHistory", JSON.stringify(history.slice(0, 25))); // salve as ultimas 25 requisicoes
-    loadHistory();
+    localStorage.setItem("requestHistory-"+idx, JSON.stringify(history.slice(0, 25))); // salve as ultimas 25 requisicoes
+    loadHistory(idx);
 }
 
-function loadHistory() {
-    let history = JSON.parse(localStorage.getItem("requestHistory")) || [];
-    let historyList = document.getElementById("historyList");
+function loadHistory(idx) {
+    let history = JSON.parse(localStorage.getItem("requestHistory-"+idx)) || [];
+    let historyList = document.getElementById("historyList-"+idx);
     historyList.innerHTML = "";
 
     history.forEach((item) => {
         let li = document.createElement("li");
-        li.className = "pb-1 historyList";
+        li.className = "pb-1 historyList-"+idx;
         li.innerHTML = `<span class="${item.status >= 400 ? 'dangerRequest' : 'sucessRequest'}">[${item.status}]</span> ${item.method} - ${item.url}`;
-        li.onclick = () => loadRequestFromHistory(item);
+        li.onclick = () => loadRequestFromHistory(item, idx);
         historyList.appendChild(li);
     });
 }
 
 
-function loadRequestFromHistory(item) {
-    document.getElementById("url").value = item.url;
-    document.getElementById("method").value = item.method;
-    document.getElementById("response").value = item.response || "";
-    document.getElementById("accessToken").value = item.accessToken || "";
+function loadRequestFromHistory(item, idx) {
+    document.getElementById("url-"+idx).value = item.url;
+    document.getElementById("method-"+idx).value = item.method;
+    document.getElementById("response-"+idx).value = item.response || "";
+    document.getElementById("accessToken-"+idx).value = item.accessToken || "";
     if (item.body) {
-        document.getElementById("body").value = JSON.stringify(item.body, null, 2);
+        document.getElementById("body-"+idx).value = JSON.stringify(item.body, null, 2);
     }
 }
 
-function clearHistory() {
-    localStorage.removeItem("requestHistory");
-    loadHistory();
+function clearHistory(idx) {
+    localStorage.removeItem("requestHistory-"+idx);
+    loadHistory(idx);
 }
-
-window.onload = loadHistory;
 
 function importar() {
     const input = document.createElement("input");
@@ -265,4 +265,80 @@ function salvarArquivo(data, filename) {
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
+}
+
+function criarNovoWorkspace(novo) {
+    let workspaces = JSON.parse(localStorage.getItem('apiTesterWorkspaces')) || [];
+
+    // Determina índice do novo workspace
+    const idx = novo ? novo.idx : (workspaces.length > 0 ? workspaces[workspaces.length - 1].idx + 1 : 1);
+
+    // Clona o template
+    const template = document.querySelector('.carousel-item').cloneNode(true);
+    template.classList.remove('active');
+    template.dataset.index = idx;
+
+    // Atualiza IDs e referências dentro do HTML clonado
+    template.innerHTML = template.innerHTML
+        .replace(/-0/g, `-${idx}`)
+        .replace(/id="apiForm-0"/g, `id="apiForm-${idx}"`)
+        .replace(/copyApiResponse\(0\)/g, `copyApiResponse(${idx})`)
+        .replace(/response-0/g, `response-${idx}`)
+        .replace(/clearResponse\(0\)/g, `clearResponse(${idx})`)
+        .replace(/historyList-0/g, `historyList-${idx}`)
+        .replace(/clearHistory\(0\)/g, `clearHistory(${idx})`)
+        .replace(/autoToggle-0/g, `autoToggle-${idx}`)
+        .replace(/intervalo-0/g, `intervalo-${idx}`)
+        .replace(/data-auto-termino-0/g, `data-auto-termino-${idx}`)
+        .replace(/keyValuePairs-0/g, `keyValuePairs-${idx}`)
+        .replace(/add-field-btn" data-index="0"/g, `add-field-btn" data-index="${idx}"`)
+        .replace(/jsonTextBody-0/g, `jsonTextBody-${idx}`)
+        .replace(/keyValueBody-0/g, `keyValueBody-${idx}`)
+        .replace(/body-0/g, `body-${idx}`)
+        .replace(/method-0/g, `method-${idx}`)
+        .replace(/url-0/g, `url-${idx}`)
+        .replace(/accessToken-0/g, `accessToken-${idx}`)
+        .replace(/sendRequest\(0\)/g, `sendRequest(${idx})`);
+
+    // Adiciona ao carousel
+    const carouselInner = document.querySelector('#workspaceCarousel .carousel-inner');
+    carouselInner.appendChild(template);
+
+    // Salva workspace na lista e no localStorage
+    if (!novo) {
+        workspaces.push({
+            name: `Workspace ${idx}`,
+            idx: idx
+        });
+        localStorage.setItem('apiTesterWorkspaces', JSON.stringify(workspaces));
+    }
+
+    // Ativa o novo item do carousel
+    const carousel = bootstrap.Carousel.getOrCreateInstance('#workspaceCarousel');
+    carousel.to(workspaces.length - 1); // Ou carousel.to(idx - 1), dependendo da lógica
+
+    loadHistory(idx);
+}
+
+function loadWorkspace() {
+    const workspaces = JSON.parse(localStorage.getItem("apiTesterWorkspaces")) || [];
+    workspaces.forEach((workspace) => {
+        criarNovoWorkspace(workspace);
+    });
+}
+
+function deleteWorkspace(idx) {
+    let workspaces = JSON.parse(localStorage.getItem('apiTesterWorkspaces')) || [];
+    workspaces = workspaces.filter(workspace => workspace.idx !== idx);
+    localStorage.setItem('apiTesterWorkspaces', JSON.stringify(workspaces));
+
+    const carouselItem = document.querySelector(`.carousel-item[data-index="${idx}"]`);
+    if (carouselItem) {
+        carouselItem.remove();
+    }
+}
+
+window.onload = () => {
+    loadHistory(0);
+    loadWorkspace();
 }
