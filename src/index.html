@@ -33,7 +33,7 @@
     .workspace { width: 100%; height: 100%; }
   </style>
 
-  <div class="fixed-top navbar-dark bg-dark">
+  <div class="window-controls fixed-top navbar-dark bg-dark">
     <div class="container-fluid p-0">
       <div class="row">
         <!-- Navbar -->
@@ -71,7 +71,7 @@
         </div>
         <div class="col-auto">
           <style>
-            .window-controls {
+            .window-controls-btn {
               height: 30px;
               padding: 4px;
               display: flex;
@@ -80,13 +80,13 @@
               -webkit-app-region: drag; /* permite mover a janela */
             }
 
-            .window-controls button {
+            .window-controls-btn button {
               -webkit-app-region: no-drag; /* os botões não devem arrastar */
               margin-left: 5px;
             }
 
           </style>
-          <div class="window-controls container-fluid navbar-dark bg-dark">
+          <div class="window-controls-btn container-fluid navbar-dark bg-dark">
             <div class="window-controls">
               <button class="btn btn-link text-white" id="minimize" title="Minimizar">
                 <i class="bi bi-dash"></i>
@@ -229,9 +229,14 @@
         <i class="bi bi-chevron-left fs-6"></i>
       </button>
 
-      <!-- Nome centralizado -->
+      <!-- Indicadores do carrossel centralizados -->
       <div class="text-center flex-grow-1">
-        <span class="fw-bold"><a target="_blank" href="http://github.com/pedromael/API-Tester.git">Github</a></span>
+        <div class="carousel-indicators">
+          <button type="button" data-bs-target="#workspaceCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+          <button type="button" data-bs-target="#workspaceCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+          <button type="button" data-bs-target="#workspaceCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+          <!-- Adicione mais indicadores conforme a quantidade de slides -->
+        </div>
       </div>
 
       <!-- Botão próximo do carrossel -->
@@ -240,6 +245,7 @@
       </button>
     </div>
   </footer>
+
 
   <script>
     newWorkspaceBtn.addEventListener('click', () => {
