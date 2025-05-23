@@ -231,13 +231,27 @@
 
       <!-- Indicadores do carrossel centralizados -->
       <div class="text-center flex-grow-1">
-        <div class="carousel-indicators">
-          <button type="button" data-bs-target="#workspaceCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-          <button type="button" data-bs-target="#workspaceCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
-          <button type="button" data-bs-target="#workspaceCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
-          <!-- Adicione mais indicadores conforme a quantidade de slides -->
-        </div>
+          <div class="carousel-indicators custom-indicators">
+          </div>
       </div>
+
+      <style>
+        .carousel-indicators.custom-indicators button {
+          background-color: transparent;
+          border: 1px solid #343a40;
+          color: #343a40;
+          padding: 5px 10px;
+          margin: 0 3px;
+          font-weight: bold;
+          border-radius: 5px;
+        }
+
+        .carousel-indicators.custom-indicators button.active {
+          background-color: #343a40;
+          color: white;
+        }
+
+      </style>
 
       <!-- Botão próximo do carrossel -->
       <button class="btn btn-link text-white" type="button" data-bs-target="#workspaceCarousel" data-bs-slide="next">

@@ -304,6 +304,17 @@ function criarNovoWorkspace(novo) {
     const carouselInner = document.querySelector('#workspaceCarousel .carousel-inner');
     carouselInner.appendChild(template);
 
+    // adiciona o workspace a lista de carroceu indicadores com  seu idx
+    const carouselIndicators = document.querySelector('.carousel-indicators'); 
+    const indicator = document.createElement('button');
+    indicator.type = 'button';
+    indicator.innerText = novo ? novo.name : `Workspace ${idx}`;
+    indicator.setAttribute('data-bs-target', '#workspaceCarousel');
+    indicator.setAttribute('data-bs-slide-to', idx);
+    indicator.setAttribute('aria-label', `Slide ${idx}`);
+    indicator.setAttribute('aria-current', 'false');
+    carouselIndicators.appendChild(indicator);
+
     // Salva workspace na lista e no localStorage
     if (!novo) {
         workspaces.push({
@@ -320,22 +331,33 @@ function criarNovoWorkspace(novo) {
     loadHistory(idx);
 }
 
+function deleteWorkspace(idx) {
+    const workspaces = JSON.parse(localStorage.getItem('apiTesterWorkspaces')) || [];
+    const updatedWorkspaces = workspaces.filter(workspace => workspace.idx !== idx);
+    localStorage.setItem('apiTesterWorkspaces', JSON.stringify(updatedWorkspaces));
+
+    // Remove o workspace do DOM
+    const carouselInner = document.querySelector('#workspaceCarousel .carousel-inner');
+    const itemToRemove = carouselInner.querySelector(`.carousel-item[data-index="${idx}"]`);
+    if (itemToRemove) {
+        carouselInner.removeChild(itemToRemove);
+    }
+
+    // Remove o indicador do carroceu
+    const carouselIndicators = document.querySelector('.carousel-indicators');
+    const indicatorToRemove = carouselIndicators.querySelector(`button[data-bs-slide-to="${idx}"]`);
+    if (indicatorToRemove) {
+        carouselIndicators.removeChild(indicatorToRemove);
+    }
+
+    loadHistory(0);
+}
+
 function loadWorkspace() {
     const workspaces = JSON.parse(localStorage.getItem("apiTesterWorkspaces")) || [];
     workspaces.forEach((workspace) => {
         criarNovoWorkspace(workspace);
     });
-}
-
-function deleteWorkspace(idx) {
-    let workspaces = JSON.parse(localStorage.getItem('apiTesterWorkspaces')) || [];
-    workspaces = workspaces.filter(workspace => workspace.idx !== idx);
-    localStorage.setItem('apiTesterWorkspaces', JSON.stringify(workspaces));
-
-    const carouselItem = document.querySelector(`.carousel-item[data-index="${idx}"]`);
-    if (carouselItem) {
-        carouselItem.remove();
-    }
 }
 
 window.onload = () => {
