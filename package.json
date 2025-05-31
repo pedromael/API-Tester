@@ -1,7 +1,7 @@
 {
   "name": "api-tester",
   "version": "2.0.0",
-  "description": "O **API-Tester** é uma ferramenta desenvolvida para facilitar o processo de teste de APIs RESTful. Com uma interface amigável, permite que desenvolvedores enviem requisições HTTP e analisem as respostas de maneira eficiente, agilizando o fluxo de trabalho e garantindo a qualidade das integrações.",
+  "description": "O API-Tester é uma ferramenta desenvolvida para facilitar o processo de teste de APIs RESTful. Com uma interface amigável, permite que desenvolvedores enviem requisições HTTP e analisem as respostas de maneira eficiente, agilizando o fluxo de trabalho e garantindo a qualidade das integrações.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -14,7 +14,7 @@
   },
   "keywords": [],
   "author": "Pedro Manuel",
-  "license": "ISC",
+  "license": "MIT",
   "type": "commonjs",
   "bugs": {
     "url": "https://github.com/pedromael/API-Tester/issues"
