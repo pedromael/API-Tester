@@ -1,0 +1,108 @@
+<style>
+    .scrollable-col { height: 100%; overflow-y: auto; }
+    .workspace { width: 100%; height: 100%; }
+</style>
+<div class="carousel-item active workspace" data-index="0">
+    <div class="row h-100 gx-4">
+        <div class="col-md-7 scrollable-col">
+            <form id="apiForm-0">
+            <div class="mb-3">
+                <label for="url-0" class="form-label">URL</label>
+                <input type="text" class="form-control" id="url-0" placeholder="Insira a URL da API" />
+            </div>
+            <div class="mb-3">
+                <label for="accessToken-0" class="form-label">Access Token</label>
+                <input type="text" class="form-control" id="accessToken-0" placeholder="Insira o access token" />
+            </div>
+            <div class="mb-3">
+                <label for="method-0" class="form-label">Method:</label>
+                <select class="method" id="method-0">
+                <option value="GET" selected>GET</option>
+                <option value="POST">POST</option>
+                <option value="PUT">PUT</option>
+                <option value="DELETE">DELETE</option>
+                </select>
+            </div>
+            <style>
+                .method{
+                background-color: white;
+                border-radius: 5px;
+                border-style: solid;
+                padding: 6px;
+                }
+            </style>
+            <div class="mb-3" data-index="0">
+                <label class="form-label">Automação</label>
+                <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="autoToggle-0">
+                <label class="form-check-label" for="autoToggle-0">Ativar Automação</label>
+                </div>
+                <div class="row mt-2">
+                <div class="col-md-6">
+                    <input type="number" id="intervalo-0" class="form-control" placeholder="Intervalo em segundos" disabled />
+                </div>
+                <div class="col-md-6">
+                    <input type="datetime-local" class="form-control" id="data-auto-termino-0" disabled />
+                </div>
+                </div>
+            </div>
+
+
+            <div class="mb-3">
+                <label class="form-label">Formato do Request Body</label>
+                <div>
+                <!-- Botões de seleção -->
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="bodyMethod-0" id="jsonTextRadio-0" value="json" checked />
+                    <label class="form-check-label" for="jsonTextRadio-0">JSON Text</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="bodyMethod-0" id="keyValueRadio-0" value="keyValue" />
+                    <label class="form-check-label" for="keyValueRadio-0">Key-Value</label>
+                </div>
+                </div>
+            </div>
+            <!-- JSON Text -->
+            <div id="jsonTextBody-0" class="mb-3">
+                <textarea class="form-control" id="body-0" rows="5" placeholder='{"key": "value"}'></textarea>
+            </div>
+
+            <!-- Key-Value -->
+            <div id="keyValueBody-0" class="mb-3" style="display: none;">
+                <div id="keyValuePairs-0">
+                <div class="row g-2 align-items-center mb-2">
+                    <div class="col">
+                    <input type="text" class="form-control" placeholder="Key">
+                    </div>
+                    <div class="col">
+                    <input type="text" class="form-control" placeholder="Value">
+                    </div>
+                    <div class="col-auto">
+                    <button class="btn btn-danger remove-field" type="button">&times;</button>
+                    </div>
+                </div>
+                </div>
+                <button type="button" class="btn btn-secondary mt-2 add-field-btn" data-index="0">Add Field</button>
+            </div>
+            <button type="button" class="btn btn-primary" onclick="sendRequest(0)">Send Request</button>
+            <button type="button" class="btn btn-secondary ms-2" onclick="deleteWorkspace(0)">Clear Workspace</button>
+            </form>
+        </div>
+        
+        <div class="col-md-5 scrollable-col">
+            <div class="container mb-2">
+            <div class="d-flex justify-content-between align-items-center mt-4">
+                <h2>API Response</h2>
+                <button class="btn btn-sm copiarResponse" onclick="copyApiResponse(0)">Copiar</button>
+            </div>
+            <pre id="response-0" class="dark-mode response"></pre>
+            <button type="button" class="btn btn-secondary ms-2" onclick="clearResponse(0)">Clear Response</button>
+            </div>
+            <div class="container">
+            <h2>Históricos</h2>
+            <ul id="historyList-0" class="list-group"></ul>
+            <button class="btn btn-danger mt-3" onclick="clearHistory(0)">Limpar Histórico</button>
+            </div>
+        </div>
+    </div>
+</div>

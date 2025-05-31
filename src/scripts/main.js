@@ -267,52 +267,35 @@ function salvarArquivo(data, filename) {
     URL.revokeObjectURL(url);
 }
 
-function criarNovoWorkspace(novo) {
+async function criarNovoWorkspace(novo) {
     let workspaces = JSON.parse(localStorage.getItem('apiTesterWorkspaces')) || [];
 
     // Determina índice do novo workspace
     const idx = novo ? novo.idx : (workspaces.length > 0 ? workspaces[workspaces.length - 1].idx + 1 : 1);
 
-    // Clona o template
-    const template = document.querySelector('.carousel-item').cloneNode(true);
-    template.classList.remove('active');
-    template.dataset.index = idx;
-
-    // Atualiza IDs e referências dentro do HTML clonado
-    template.innerHTML = template.innerHTML
-        .replace(/-0/g, `-${idx}`)
-        .replace(/id="apiForm-0"/g, `id="apiForm-${idx}"`)
-        .replace(/copyApiResponse\(0\)/g, `copyApiResponse(${idx})`)
-        .replace(/response-0/g, `response-${idx}`)
-        .replace(/clearResponse\(0\)/g, `clearResponse(${idx})`)
-        .replace(/historyList-0/g, `historyList-${idx}`)
-        .replace(/clearHistory\(0\)/g, `clearHistory(${idx})`)
-        .replace(/autoToggle-0/g, `autoToggle-${idx}`)
-        .replace(/intervalo-0/g, `intervalo-${idx}`)
-        .replace(/data-auto-termino-0/g, `data-auto-termino-${idx}`)
-        .replace(/keyValuePairs-0/g, `keyValuePairs-${idx}`)
-        .replace(/add-field-btn" data-index="0"/g, `add-field-btn" data-index="${idx}"`)
-        .replace(/jsonTextBody-0/g, `jsonTextBody-${idx}`)
-        .replace(/keyValueBody-0/g, `keyValueBody-${idx}`)
-        .replace(/body-0/g, `body-${idx}`)
-        .replace(/method-0/g, `method-${idx}`)
-        .replace(/url-0/g, `url-${idx}`)
-        .replace(/accessToken-0/g, `accessToken-${idx}`)
-        .replace(/sendRequest\(0\)/g, `sendRequest(${idx})`);
+    // Cria o elemento do slide
+    const slide = document.createElement('div');
+    slide.classList.add('carousel-item');
+    if (workspaces.length === 0 && !novo) slide.classList.add('active');
+    slide.dataset.index = idx;
+    slide.innerHTML = `<div class="workspace-content p-3">Carregando...</div>`; // placeholder
 
     // Adiciona ao carousel
     const carouselInner = document.querySelector('#workspaceCarousel .carousel-inner');
-    carouselInner.appendChild(template);
+    carouselInner.appendChild(slide);
 
-    // adiciona o workspace a lista de carroceu indicadores com  seu idx
+    // adiciona o workspace à lista de indicadores do carrossel com seu idx
     const carouselIndicators = document.querySelector('.carousel-indicators'); 
     const indicator = document.createElement('button');
     indicator.type = 'button';
     indicator.innerText = novo ? novo.name : `Workspace ${idx}`;
     indicator.setAttribute('data-bs-target', '#workspaceCarousel');
-    indicator.setAttribute('data-bs-slide-to', idx);
+    indicator.setAttribute('data-bs-slide-to', idx - 1); // slide-to começa em 0
     indicator.setAttribute('aria-label', `Slide ${idx}`);
-    indicator.setAttribute('aria-current', 'false');
+    if (workspaces.length === 0 && !novo) {
+        indicator.classList.add('active');
+        indicator.setAttribute('aria-current', 'true');
+    }
     carouselIndicators.appendChild(indicator);
 
     // Salva workspace na lista e no localStorage
@@ -324,11 +307,61 @@ function criarNovoWorkspace(novo) {
         localStorage.setItem('apiTesterWorkspaces', JSON.stringify(workspaces));
     }
 
+    // Carrega conteúdo de workspace.html
+    try {
+        const response = await fetch('workspace.html');
+        const html = await response.text();
+
+        // Ajusta os IDs e funções internas conforme o idx
+        const htmlAtualizado = html
+            .replace(/-0/g, `-${idx}`)
+            .replace(/id="apiForm-0"/g, `id="apiForm-${idx}"`)
+            .replace(/copyApiResponse\(0\)/g, `copyApiResponse(${idx})`)
+            .replace(/response-0/g, `response-${idx}`)
+            .replace(/clearResponse\(0\)/g, `clearResponse(${idx})`)
+            .replace(/historyList-0/g, `historyList-${idx}`)
+            .replace(/clearHistory\(0\)/g, `clearHistory(${idx})`)
+            .replace(/autoToggle-0/g, `autoToggle-${idx}`)
+            .replace(/intervalo-0/g, `intervalo-${idx}`)
+            .replace(/data-auto-termino-0/g, `data-auto-termino-${idx}`)
+            .replace(/keyValuePairs-0/g, `keyValuePairs-${idx}`)
+            .replace(/add-field-btn" data-index="0"/g, `add-field-btn" data-index="${idx}"`)
+            .replace(/jsonTextBody-0/g, `jsonTextBody-${idx}`)
+            .replace(/keyValueBody-0/g, `keyValueBody-${idx}`)
+            .replace(/body-0/g, `body-${idx}`)
+            .replace(/method-0/g, `method-${idx}`)
+            .replace(/url-0/g, `url-${idx}`)
+            .replace(/accessToken-0/g, `accessToken-${idx}`)
+            .replace(/sendRequest\(0\)/g, `sendRequest(${idx})`)
+            .replace(/deleteWorkspace\(0\)/g, `deleteWorkspace(${idx})`);
+
+        slide.innerHTML = `<div class="workspace-content p-3">${htmlAtualizado}</div>`;
+
+        // Carrega histórico (opcional)
+        loadHistory(idx);
+    } catch (err) {
+        slide.innerHTML = `<div class="text-danger p-3">Erro ao carregar workspace.html</div>`;
+        console.error('Erro ao carregar workspace:', err);
+    }
+
     // Ativa o novo item do carousel
     const carousel = bootstrap.Carousel.getOrCreateInstance('#workspaceCarousel');
     carousel.to(workspaces.length - 1); // Ou carousel.to(idx - 1), dependendo da lógica
+}
 
-    loadHistory(idx);
+function deleteAllWorkspaces() {
+    const workspaces = JSON.parse(localStorage.getItem('apiTesterWorkspaces')) || [];
+    workspaces.forEach(workspace => {
+        const carouselInner = document.querySelector('#workspaceCarousel .carousel-inner');
+        const itemToRemove = carouselInner.querySelector(`.carousel-item[data-index="${workspace.idx}"]`);
+        if (itemToRemove) {
+            carouselInner.removeChild(itemToRemove);
+        }
+    });
+
+    localStorage.removeItem('apiTesterWorkspaces');
+    document.querySelector('.carousel-indicators').innerHTML = '';
+    loadHistory(0);
 }
 
 function deleteWorkspace(idx) {
