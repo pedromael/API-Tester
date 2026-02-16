@@ -115,3 +115,58 @@ input:checked + .slider:before {
   scrollbar-width: thin;
   scrollbar-color: #343a40 #f1f1f1;
 }
+
+.carousel-indicators.custom-indicators {
+  position: static;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .35rem;
+}
+
+.carousel-indicators.custom-indicators button {
+  width: auto;
+  height: auto;
+  text-indent: 0;
+  margin: 0;
+  opacity: .8;
+  background-color: transparent;
+  border: 1px solid rgba(255, 255, 255, .45);
+  color: rgba(255, 255, 255, .9);
+  padding: .2rem .55rem;
+  border-radius: 999px;
+  font-size: .75rem;
+  line-height: 1.2;
+  font-weight: 600;
+  transition: all .2s ease;
+}
+
+.carousel-indicators.custom-indicators button:hover {
+  border-color: rgba(255, 255, 255, .9);
+  color: #fff;
+}
+
+.carousel-indicators.custom-indicators button.active {
+  opacity: 1;
+  background-color: #fff;
+  border-color: #fff;
+  color: #212529;
+}
+
+.carousel-nav-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  background-color: rgba(255, 255, 255, .12);
+  transition: background-color .2s ease, transform .2s ease;
+}
+
+.carousel-nav-btn:hover {
+  background-color: rgba(255, 255, 255, .22);
+  transform: translateY(-1px);
+}
